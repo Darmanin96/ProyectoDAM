@@ -41,7 +41,7 @@
                 android:id="@+id/edit_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Correo electrónico"
+                android:hint="Nombre de usuario"
                 android:inputType="textEmailAddress"
                 android:importantForAccessibility="yes" />
         </com.google.android.material.textfield.TextInputLayout>

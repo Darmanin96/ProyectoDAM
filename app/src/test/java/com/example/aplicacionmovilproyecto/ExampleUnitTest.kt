@@ -1,6 +1,6 @@
 package com.example.aplicacionmovilproyecto
 
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 import org.junit.Assert.*
 

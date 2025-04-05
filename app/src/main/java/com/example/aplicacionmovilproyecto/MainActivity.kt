@@ -11,36 +11,35 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var btnLogin: Button
     private lateinit var btnRegister: Button
-    private lateinit var editEmail: EditText
+    private lateinit var editUsername: EditText
     private lateinit var editPassword: EditText
     private lateinit var errorMessage: TextView
 
-    private val smbHost = "192.168.1.10"  // ← IP de tu servidor SMB (TrueNAS)
-    private val sharedFolder = "Compartida"
+    private val smbHost = "192.168.1.252"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main) // 👈 Importante: ¡esto va primero!
+        setContentView(R.layout.activity_main)
 
         btnLogin = findViewById(R.id.btn_login)
         btnRegister = findViewById(R.id.btn_register)
-        editEmail = findViewById(R.id.edit_email)
+        editUsername = findViewById(R.id.edit_email) // Asumiendo que mantuviste el ID en el layout
         editPassword = findViewById(R.id.edit_password)
         errorMessage = findViewById(R.id.error_message)
 
         btnLogin.setOnClickListener {
-            val email = editEmail.text.toString()
+            val username = editUsername.text.toString() // Usando editUsername
             val password = editPassword.text.toString()
 
-            if (email.isBlank() || password.isBlank()) {
-                errorMessage.text = "Por favor ingresa todos los campos."
+            if (username.isBlank() || password.isBlank()) {
+                errorMessage.text = "Por favor ingresa el nombre de usuario y la contraseña."
                 return@setOnClickListener
             }
 
             errorMessage.text = ""
 
             // Verificar contra servidor SMB
-            verificarCredenciales(email, password)
+            verificarCredenciales(username, password, smbHost)
         }
 
         btnRegister.setOnClickListener {
@@ -48,20 +47,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun verificarCredenciales(username: String, password: String) {
+    // Función para verificar las credenciales
+    private fun verificarCredenciales(username: String, password: String, smbHost: String) {
         Thread {
             try {
+                // Modificar el nombre de la carpeta según el usuario
+                val sharedFolder = obtenerCarpetaSegunUsuario(username)
+
                 val client = SMBClient()
                 val connection = client.connect(smbHost)
                 val context = AuthenticationContext(username, password.toCharArray(), "")
                 val session = connection.authenticate(context)
-                val share = session.connectShare(sharedFolder)
+                val share = session.connectShare(sharedFolder) // Conectar a la carpeta del usuario
 
                 runOnUiThread {
                     Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, ExplorerActivity::class.java)
                     intent.putExtra("username", username)
                     intent.putExtra("password", password)
+                    intent.putExtra("smbHost", smbHost)  // Pasa la IP del servidor al intent
+                    intent.putExtra("sharedFolder", sharedFolder) // Pasa la carpeta
                     startActivity(intent)
                     finish()
                 }
@@ -69,9 +74,18 @@ class MainActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 e.printStackTrace()
                 runOnUiThread {
-                    errorMessage.text = "Credenciales inválidas o error de conexión con el servidor."
+                    errorMessage.text = "Error: ${e.message}" // Mostrar mensaje detallado
                 }
             }
+
         }.start()
+    }
+
+    private fun obtenerCarpetaSegunUsuario(username: String): String {
+        return when (username) {
+            "user1" -> "User1" // Actualizado para coincidir con el nombre de usuario
+            "usuario2" -> "User2"
+            else -> "DefaultFolder"
+        }
     }
 }
