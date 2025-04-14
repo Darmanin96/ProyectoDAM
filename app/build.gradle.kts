@@ -38,24 +38,15 @@ android {
 }
 
 dependencies {
-    // SMBJ para conectarse al servidor SMB
     implementation("com.hierynomus:smbj:0.11.5")
-
-    // Bibliotecas estándar de Android
+    implementation ("com.hierynomus:smbj:0.11.3")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
 
-    // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-    // Dependencias explícitas (no es necesario si ya están en libs)
-    // Si no usas la declaración `libs` para estas, entonces mantenlas
-    // implementation("androidx.activity:activity:1.10.0")
-    // implementation("androidx.core:core:1.15.0")
-    // implementation("androidx.core:core-ktx:1.15.0")
 }

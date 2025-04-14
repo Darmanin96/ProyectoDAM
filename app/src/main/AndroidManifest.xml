@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
@@ -24,8 +23,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ExplorerActivity"
+
+        <activity
+            android:name=".ExplorerActivity"
             android:exported="false"/>
+
+        <!-- Aquí agregas la declaración de la nueva actividad -->
+        <activity
+            android:name=".FileContentActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         btnLogin = findViewById(R.id.btn_login)
         btnRegister = findViewById(R.id.btn_register)
-        editUsername = findViewById(R.id.edit_email) // Asumiendo que mantuviste el ID en el layout
+        editUsername = findViewById(R.id.edit_email)
         editPassword = findViewById(R.id.edit_password)
         errorMessage = findViewById(R.id.error_message)
 
@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
 
             errorMessage.text = ""
 
-            // Verificar contra servidor SMB
             verificarCredenciales(username, password, smbHost)
         }
 
@@ -47,26 +46,24 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Función para verificar las credenciales
     private fun verificarCredenciales(username: String, password: String, smbHost: String) {
         Thread {
             try {
-                // Modificar el nombre de la carpeta según el usuario
                 val sharedFolder = obtenerCarpetaSegunUsuario(username)
 
                 val client = SMBClient()
                 val connection = client.connect(smbHost)
                 val context = AuthenticationContext(username, password.toCharArray(), "")
                 val session = connection.authenticate(context)
-                val share = session.connectShare(sharedFolder) // Conectar a la carpeta del usuario
+                val share = session.connectShare(sharedFolder)
 
                 runOnUiThread {
                     Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, ExplorerActivity::class.java)
                     intent.putExtra("username", username)
                     intent.putExtra("password", password)
-                    intent.putExtra("smbHost", smbHost)  // Pasa la IP del servidor al intent
-                    intent.putExtra("sharedFolder", sharedFolder) // Pasa la carpeta
+                    intent.putExtra("smbHost", smbHost)
+                    intent.putExtra("sharedFolder", sharedFolder)
                     startActivity(intent)
                     finish()
                 }
@@ -74,7 +71,7 @@ class MainActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 e.printStackTrace()
                 runOnUiThread {
-                    errorMessage.text = "Error: ${e.message}" // Mostrar mensaje detallado
+                    errorMessage.text = "Error: ${e.message}"
                 }
             }
 
@@ -83,7 +80,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun obtenerCarpetaSegunUsuario(username: String): String {
         return when (username) {
-            "user1" -> "User1" // Actualizado para coincidir con el nombre de usuario
+            "user1" -> "User1"
             "usuario2" -> "User2"
             else -> "DefaultFolder"
         }

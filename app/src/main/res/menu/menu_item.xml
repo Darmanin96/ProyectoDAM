@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/rename"
+        android:title="Cambiar Nombre" />
+    <item
+        android:id="@+id/delete"
+        android:title="Eliminar" />
+</menu>
