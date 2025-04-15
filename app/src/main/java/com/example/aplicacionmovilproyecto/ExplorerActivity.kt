@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hierynomus.msdtyp.AccessMask
@@ -20,6 +21,7 @@ import com.hierynomus.smbj.connection.Connection
 import com.hierynomus.smbj.share.DiskShare
 
 import kotlinx.coroutines.*
+import java.io.File
 
 class ExplorerActivity : AppCompatActivity() {
 
@@ -50,9 +52,7 @@ class ExplorerActivity : AppCompatActivity() {
             fileList,
             onRename = { fileItem -> showRenameDialog(fileItem) },
             onDelete = { fileItem -> showDeleteConfirmationDialog(fileItem) },
-            onDoubleClick = { fileItem ->
-                openFile(fileItem)
-            }
+            onDoubleClick = { fileItem -> openFileByExtension(fileItem) }
         )
 
         recyclerView.adapter = fileAdapter
@@ -160,6 +160,85 @@ class ExplorerActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun openFileByExtension(fileItem: FileItem) {
+        activityScope.launch(Dispatchers.IO) {
+            try {
+                val remoteFile = share?.openFile(
+                    fileItem.name,
+                    setOf(AccessMask.GENERIC_READ),
+                    null,
+                    SMB2ShareAccess.ALL,
+                    SMB2CreateDisposition.FILE_OPEN,
+                    null
+                )
+
+                val extension = fileItem.name.substringAfterLast('.', "").lowercase()
+                val tempFile = File.createTempFile(
+                    fileItem.name.substringBeforeLast("."),
+                    "." + extension,
+                    cacheDir
+                )
+
+                remoteFile?.inputStream?.use { input ->
+                    tempFile.outputStream().use { output ->
+                        input.copyTo(output)
+                    }
+                }
+
+                remoteFile?.close()
+
+                if (extension == "txt" || extension == "log" || extension == "json" || extension == "xml" || extension == "md") {
+                    // Forzar apertura en tu propia app
+                    val content = tempFile.readText()
+                    withContext(Dispatchers.Main) {
+                        val intent = Intent(this@ExplorerActivity, FileContentActivity::class.java).apply {
+                            putExtra("fileName", fileItem.name)
+                            putExtra("fileContent", content)
+                        }
+                        startActivity(intent)
+                    }
+                } else {
+                    // Usar app externa solo si no es un tipo manejado internamente
+                    val uri = FileProvider.getUriForFile(
+                        this@ExplorerActivity,
+                        "$packageName.fileprovider",
+                        tempFile
+                    )
+
+                    val mimeType = when (extension) {
+                        "pdf" -> "application/pdf"
+                        "jpg", "jpeg" -> "image/jpeg"
+                        "png" -> "image/png"
+                        "doc", "docx" -> "application/msword"
+                        "xls", "xlsx" -> "application/vnd.ms-excel"
+                        else -> "*/*"
+                    }
+
+                    val openIntent = Intent(Intent.ACTION_VIEW).apply {
+                        setDataAndType(uri, mimeType)
+                        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        try {
+                            startActivity(openIntent)
+                        } catch (e: Exception) {
+                            Toast.makeText(this@ExplorerActivity, "No hay app para abrir este archivo", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@ExplorerActivity, "Error abriendo el archivo: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+
+
 
     private fun showRenameDialog(fileItem: FileItem) {
         val input = EditText(this).apply {
