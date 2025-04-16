@@ -1,51 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="center">
+    tools:context=".FileContentActivity">
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <!-- Usar un tema oscuro para la AppBar suele quedar bien -->
 
-        <ImageButton
-            android:id="@+id/btn_back"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/icons8flechaizquierda50"
-            android:background="?android:attr/selectableItemBackground"
-            android:contentDescription="Volver"
-            android:padding="2dp"
-            android:onClick="onBackPressed"
-            android:layout_gravity="center_vertical" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_file_content"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        <!-- popupTheme claro para el menú overflow si lo hubiera -->
 
-        <TextView
-            android:id="@+id/file_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Nombre del archivo"
-            android:textSize="20sp"
-            android:textColor="@android:color/black"
-            android:gravity="center_horizontal" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/file_content"
+    <!-- Usamos NestedScrollView para asegurar el scroll si el contenido es muy grande -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="Contenido del archivo"
-        android:textSize="16sp"
-        android:scrollbars="vertical"
-        android:padding="16dp"
-        android:focusable="false"
-        android:clickable="false"
-        android:layout_marginTop="16dp"/>
-</LinearLayout>
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:fillViewport="true"> <!-- Importante para que el contenido llene el espacio vertical -->
+
+        <!-- TextInputLayout mejora la apariencia y usabilidad del EditText -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/file_content_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            app:hintEnabled="false"> <!-- No necesitamos un hint flotante aquí -->
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/file_content_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top|start"
+                android:inputType="textMultiLine"
+                android:scrollbars="vertical"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="?android:attr/textColorPrimary"
+                tools:text="Contenido del archivo de texto...\nLínea 2\nLínea 3..." />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

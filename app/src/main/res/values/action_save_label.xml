@@ -1,0 +1,5 @@
+<resources>
+    <!-- ... otros strings ... -->
+    <string name="save_changes_action">Guardar</string>
+    <string name="file_editor_title">Editor de Archivo</string>
+</resources>
