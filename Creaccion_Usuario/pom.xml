@@ -1,0 +1,193 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>dad</groupId>
+  <artifactId>Creaccion_Usuario</artifactId>
+  <version>1.0.0</version> <!-- Versión válida -->
+  <packaging>jar</packaging>
+
+  <name>Creaccion_Usuario</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- Volvemos a 21 por si acaso, pero puedes poner 22 si usas JDK 22 -->
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+    <javafx.version>21.0.2</javafx.version>
+    <!-- Jackson versión que SÍ es modular -->
+    <jackson.version>2.17.0</jackson.version>
+    <javafx.main.class>dad.Main.Main</javafx.main.class>
+    <!-- Directorio para dependencias normales -->
+    <modules.dir>${project.build.directory}/modules</modules.dir>
+    <!-- Eliminada propiedad main.jar.name -->
+  </properties>
+
+  <dependencies>
+    <!-- JUnit -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- Jackson Databind -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <!-- JavaFX Controls -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>${javafx.version}</version>
+    </dependency>
+    <!-- JavaFX FXML -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+      <version>${javafx.version}</version>
+    </dependency>
+    <!-- JavaFX Graphics -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-graphics</artifactId>
+      <version>${javafx.version}</version>
+    </dependency>
+    <!-- JavaFX Base -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-base</artifactId>
+      <version>${javafx.version}</version>
+    </dependency>
+    <!-- Jackson Core -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <!-- Jackson Annotations -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <!-- Definir nombre base del JAR aquí -->
+    <finalName>${project.artifactId}-${project.version}</finalName>
+    <plugins>
+      <!-- Plugin del compilador de Maven -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.11.0</version>
+        <configuration>
+          <!-- Usar release es preferible a source/target -->
+          <release>${maven.compiler.target}</release>
+        </configuration>
+      </plugin>
+
+      <!-- Plugin Dependency: para copiar TODOS los módulos necesarios -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.6.1</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${modules.dir}</outputDirectory>
+              <includeScope>runtime</includeScope>
+              <stripVersion>false</stripVersion>
+              <stripClassifier>false</stripClassifier>
+              <overWriteIfNewer>true</overWriteIfNewer>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Plugin Jar (Configuración estándar, genera JAR en target) -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.4.1</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>false</addClasspath>
+              <mainClass>${javafx.main.class}</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <!-- Plugin JavaFX: para 'mvn javafx:run' -->
+      <plugin>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>0.0.8</version>
+        <configuration>
+          <mainClass>${javafx.main.class}</mainClass>
+          <options>
+            <option>--module-path</option>
+            <option>${modules.dir}</option>
+            <option>--add-modules</option>
+            <option>javafx.controls,javafx.fxml,javafx.graphics,com.fasterxml.jackson.databind,com.fasterxml.jackson.core,com.fasterxml.jackson.annotations</option>
+          </options>
+        </configuration>
+      </plugin>
+
+      <!-- Plugin jpackage: Restaurado a la configuración anterior -->
+      <plugin>
+        <groupId>org.panteleyev</groupId>
+        <artifactId>jpackage-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <configuration>
+          <name>${project.name}</name>
+          <appVersion>${project.version}</appVersion>
+          <vendor>Tu Compañía</vendor>
+          <destination>target/dist</destination>
+          <!-- Restaurar INPUT -->
+          <input>${project.build.directory}</input>
+          <!-- Usar nombre del JAR principal definido en build/finalName -->
+          <mainJar>${project.build.finalName}.jar</mainJar>
+          <mainClass>${javafx.main.class}</mainClass>
+
+          <!-- Restaurar ambas rutas -->
+          <modulePaths>
+            <modulePath>${modules.dir}</modulePath>
+            <modulePath>${project.build.directory}</modulePath>
+          </modulePaths>
+
+          <!-- Módulos a incluir (lista completa) -->
+          <addModules>
+            <module>java.base</module>
+            <module>javafx.controls</module>
+            <module>javafx.fxml</module>
+            <module>javafx.graphics</module>
+            <module>com.fasterxml.jackson.databind</module>
+            <module>com.fasterxml.jackson.core</module>
+            <module>com.fasterxml.jackson.annotations</module>
+          </addModules>
+
+         
+          <arguments>
+            <argument>--verbose</argument>
+          </arguments>
+
+          <winMenu>true</winMenu>
+          <winShortcut>true</winShortcut>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+</project>

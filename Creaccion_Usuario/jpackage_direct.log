@@ -1,0 +1,74 @@
+[20:45:05.350] Running candle.exe
+[20:45:05.361] Running C:\Program Files (x86)\WiX Toolset v3.14\bin\candle.exe
+[20:45:05.446] Running light.exe
+[20:45:05.449] Running C:\Program Files (x86)\WiX Toolset v3.14\bin\light.exe
+[20:45:05.570] Detected [candle.exe] version [3.14.1.8722].
+[20:45:05.570] Detected [light.exe] version [3.14.1.8722].
+[20:45:05.570] WiX 3.14.1.8722 detected. Enabling advanced cleanup action.
+[20:45:05.783] Command [PID: -1]:
+    jlink --output C:\Users\darma\AppData\Local\Temp\jdk.jpackage18238974677178125895\images\win-msi.image\Creaccion_Usuario\runtime --module-path target\\modules;target;C:\\Program Files\\Java\\jdk-22\\jmods --add-modules javafx.controls,javafx.graphics,javafx.fxml,com.fasterxml.jackson.core,com.fasterxml.jackson.databind,java.base,com.fasterxml.jackson.annotations --strip-native-commands --strip-debug --no-man-pages --no-header-files
+[20:45:05.783] Output:
+    Error: Module com.fasterxml.jackson.annotations not found
+java.lang.module.FindException: Module com.fasterxml.jackson.annotations not found
+	at java.base/java.lang.module.Resolver.findFail(Resolver.java:892)
+	at java.base/java.lang.module.Resolver.resolve(Resolver.java:129)
+	at java.base/java.lang.module.Configuration.resolve(Configuration.java:420)
+	at java.base/java.lang.module.Configuration.resolve(Configuration.java:254)
+	at jdk.jlink/jdk.tools.jlink.internal.Jlink$JlinkConfiguration.resolve(Jlink.java:206)
+	at jdk.jlink/jdk.tools.jlink.internal.JlinkTask.createImageProvider(JlinkTask.java:525)
+	at jdk.jlink/jdk.tools.jlink.internal.JlinkTask.createImage(JlinkTask.java:410)
+	at jdk.jlink/jdk.tools.jlink.internal.JlinkTask.run(JlinkTask.java:285)
+	at jdk.jlink/jdk.tools.jlink.internal.Main.run(Main.java:56)
+	at jdk.jlink/jdk.tools.jlink.internal.Main$JlinkToolProvider.run(Main.java:73)
+	at jdk.jpackage/jdk.jpackage.internal.JLinkBundlerHelper.runJLink(JLinkBundlerHelper.java:191)
+	at jdk.jpackage/jdk.jpackage.internal.JLinkBundlerHelper.execute(JLinkBundlerHelper.java:81)
+	at jdk.jpackage/jdk.jpackage.internal.AppImageBundler.createAppBundle(AppImageBundler.java:181)
+	at jdk.jpackage/jdk.jpackage.internal.AppImageBundler.execute(AppImageBundler.java:93)
+	at jdk.jpackage/jdk.jpackage.internal.WinMsiBundler.prepareProto(WinMsiBundler.java:370)
+	at jdk.jpackage/jdk.jpackage.internal.WinMsiBundler.execute(WinMsiBundler.java:427)
+	at jdk.jpackage/jdk.jpackage.internal.WinExeBundler.bundle(WinExeBundler.java:104)
+	at jdk.jpackage/jdk.jpackage.internal.WinExeBundler.execute(WinExeBundler.java:77)
+	at jdk.jpackage/jdk.jpackage.internal.Arguments.generateBundle(Arguments.java:714)
+	at jdk.jpackage/jdk.jpackage.internal.Arguments.processArguments(Arguments.java:561)
+	at jdk.jpackage/jdk.jpackage.main.Main.execute(Main.java:92)
+	at jdk.jpackage/jdk.jpackage.main.Main.main(Main.java:53)
+
+[20:45:05.785] Returned: 1
+
+[20:45:05.788] jdk.jpackage.internal.PackagerException: jlink failed with: Error: Module com.fasterxml.jackson.annotations not found
+java.lang.module.FindException: Module com.fasterxml.jackson.annotations not found
+	at java.base/java.lang.module.Resolver.findFail(Resolver.java:892)
+	at java.base/java.lang.module.Resolver.resolve(Resolver.java:129)
+	at java.base/java.lang.module.Configuration.resolve(Configuration.java:420)
+	at java.base/java.lang.module.Configuration.resolve(Configuration.java:254)
+	at jdk.jlink/jdk.tools.jlink.internal.Jlink$JlinkConfiguration.resolve(Jlink.java:206)
+	at jdk.jlink/jdk.tools.jlink.internal.JlinkTask.createImageProvider(JlinkTask.java:525)
+	at jdk.jlink/jdk.tools.jlink.internal.JlinkTask.createImage(JlinkTask.java:410)
+	at jdk.jlink/jdk.tools.jlink.internal.JlinkTask.run(JlinkTask.java:285)
+	at jdk.jlink/jdk.tools.jlink.internal.Main.run(Main.java:56)
+	at jdk.jlink/jdk.tools.jlink.internal.Main$JlinkToolProvider.run(Main.java:73)
+	at jdk.jpackage/jdk.jpackage.internal.JLinkBundlerHelper.runJLink(JLinkBundlerHelper.java:191)
+	at jdk.jpackage/jdk.jpackage.internal.JLinkBundlerHelper.execute(JLinkBundlerHelper.java:81)
+	at jdk.jpackage/jdk.jpackage.internal.AppImageBundler.createAppBundle(AppImageBundler.java:181)
+	at jdk.jpackage/jdk.jpackage.internal.AppImageBundler.execute(AppImageBundler.java:93)
+	at jdk.jpackage/jdk.jpackage.internal.WinMsiBundler.prepareProto(WinMsiBundler.java:370)
+	at jdk.jpackage/jdk.jpackage.internal.WinMsiBundler.execute(WinMsiBundler.java:427)
+	at jdk.jpackage/jdk.jpackage.internal.WinExeBundler.bundle(WinExeBundler.java:104)
+	at jdk.jpackage/jdk.jpackage.internal.WinExeBundler.execute(WinExeBundler.java:77)
+	at jdk.jpackage/jdk.jpackage.internal.Arguments.generateBundle(Arguments.java:714)
+	at jdk.jpackage/jdk.jpackage.internal.Arguments.processArguments(Arguments.java:561)
+	at jdk.jpackage/jdk.jpackage.main.Main.execute(Main.java:92)
+	at jdk.jpackage/jdk.jpackage.main.Main.main(Main.java:53)
+
+	at jdk.jpackage/jdk.jpackage.internal.JLinkBundlerHelper.runJLink(JLinkBundlerHelper.java:199)
+	at jdk.jpackage/jdk.jpackage.internal.JLinkBundlerHelper.execute(JLinkBundlerHelper.java:81)
+	at jdk.jpackage/jdk.jpackage.internal.AppImageBundler.createAppBundle(AppImageBundler.java:181)
+	at jdk.jpackage/jdk.jpackage.internal.AppImageBundler.execute(AppImageBundler.java:93)
+	at jdk.jpackage/jdk.jpackage.internal.WinMsiBundler.prepareProto(WinMsiBundler.java:370)
+	at jdk.jpackage/jdk.jpackage.internal.WinMsiBundler.execute(WinMsiBundler.java:427)
+	at jdk.jpackage/jdk.jpackage.internal.WinExeBundler.bundle(WinExeBundler.java:104)
+	at jdk.jpackage/jdk.jpackage.internal.WinExeBundler.execute(WinExeBundler.java:77)
+	at jdk.jpackage/jdk.jpackage.internal.Arguments.generateBundle(Arguments.java:714)
+	at jdk.jpackage/jdk.jpackage.internal.Arguments.processArguments(Arguments.java:561)
+	at jdk.jpackage/jdk.jpackage.main.Main.execute(Main.java:92)
+	at jdk.jpackage/jdk.jpackage.main.Main.main(Main.java:53)
