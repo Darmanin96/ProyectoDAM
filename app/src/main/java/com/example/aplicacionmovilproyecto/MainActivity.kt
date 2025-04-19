@@ -10,7 +10,6 @@ import com.hierynomus.smbj.auth.AuthenticationContext
 class MainActivity : AppCompatActivity() {
 
     private lateinit var btnLogin: Button
-    private lateinit var btnRegister: Button
     private lateinit var editUsername: EditText
     private lateinit var editPassword: EditText
     private lateinit var errorMessage: TextView
@@ -22,7 +21,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         btnLogin = findViewById(R.id.btn_login)
-        btnRegister = findViewById(R.id.btn_register)
         editUsername = findViewById(R.id.edit_email)
         editPassword = findViewById(R.id.edit_password)
         errorMessage = findViewById(R.id.error_message)
@@ -41,9 +39,6 @@ class MainActivity : AppCompatActivity() {
             verificarCredenciales(username, password, smbHost)
         }
 
-        btnRegister.setOnClickListener {
-            Toast.makeText(this, "Función de registro no implementada.", Toast.LENGTH_SHORT).show()
-        }
     }
 
     private fun verificarCredenciales(username: String, password: String, smbHost: String) {

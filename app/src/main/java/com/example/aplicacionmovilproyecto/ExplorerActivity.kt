@@ -37,7 +37,7 @@ import java.util.EnumSet // Necesario para crear carpetas
 
 class ExplorerActivity : AppCompatActivity() {
 
-    // ... (Companion object, variables de instancia, etc. sin cambios)...
+
     companion object {
         const val REQUEST_CODE_EDIT_FILE = 1
         private const val TAG = "ExplorerActivity"
@@ -857,7 +857,7 @@ class ExplorerActivity : AppCompatActivity() {
                     createFile(fileName)
                 }
             }
-            .setNegativeButton("Cancelar", null) // R.string.cancel
+            .setNegativeButton("Cancelar", null)
             .show()
     }
     //endregion
